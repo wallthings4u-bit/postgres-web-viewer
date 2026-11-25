@@ -1,7 +1,12 @@
 # Docker Compose 環境構築（PostgreSQL + pgAdmin + Python）
 
-Docker Compose を用いて、データベース（PostgreSQL）、管理画面（pgAdmin）、およびデータ表示用Webアプリ（Python / Flask）の3コンテナを一括構築するプロジェクトです。
+Docker Compose を用いて、データベース（PostgreSQL）、管理画面（pgAdmin）、およびデータ管理用Webアプリ（Python / Flask）の3コンテナを一括構築するプロジェクトです。
 コンテナ起動時に `init.sql` と `sample.csv` を自動で読み込み、初期テーブルの作成とデータ投入を行います。
+
+## 主な機能
+* **データ一覧表示**: PostgreSQL の `members` テーブルのデータをブラウザ上に一覧表示
+* **データ新規追加**: ブラウザ上の入力フォームから新しいメンバーをDBへ登録
+* **データ削除**: 一覧画面の各行にある削除ボタンから該当データをDBから削除
 
 ## 構成技術
 * **コンテナ基盤**: Docker / Docker Compose
@@ -20,5 +25,5 @@ Docker Compose を用いて、データベース（PostgreSQL）、管理画面�
    docker compose up -d --build
    ```
 4. ブラウザで以下にアクセスして動作を確認します。
-   * **Webアプリ（Members一覧表示）**: `http://localhost:5000`
+   * **Webアプリ（Members管理画面）**: `http://localhost:5000`
    * **pgAdmin（DB管理画面）**: `http://localhost:8088`
