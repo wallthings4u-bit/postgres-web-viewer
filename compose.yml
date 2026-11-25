@@ -1,0 +1,29 @@
+# 複数のコンテナ（サービス）をまとめて定義・管理するセクション
+services:
+  # 1つ目のコンテナ：PostgreSQL（データベース本体）
+  postgres:
+    image: postgres:16 # Docker Hubから取得する公式イメージとバージョン
+    ports:
+      - 5432:5432 # ホスト(PC)側の5432番ポートを、コンテナ側の5432番ポートへ転送
+    volumes:
+      # 名前付きボリューム：コンテナを削除してもDBのデータが消えないように永続化
+      - postgres_data:/var/lib/postgresql/data
+      # バインドマウント：ローカルの ./csv フォルダをコンテナ内の /csv とリアルタイム同期
+      - ./csv:/csv
+      - ./init:/docker-entrypoint-initdb.d
+    env_file:
+      - .env # DB名・ユーザー名・パスワードなどの環境変数を外部の .env ファイルから読み込み
+
+  # 2つ目のコンテナ：pgAdmin（ブラウザからPostgreSQLを操作するWeb管理画面）
+  pgadmin:
+    image: dpage/pgadmin4 # pgAdmin 4 の公式イメージ
+    ports:
+      - 8088:80 # ブラウザから http://localhost:8088 でアクセスできるように設定
+    depends_on:
+      - postgres # postgresコンテナが先に起動してからpgAdminを起動する（起動順序の制御）
+    env_file:
+      - .env # pgAdminのログイン用メールアドレス・パスワードを .env から読み込み
+
+# データを永続化するための「名前付きボリューム」の宣言
+volumes:
+  postgres_data:
