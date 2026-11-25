@@ -24,6 +24,18 @@ services:
     env_file:
       - .env # pgAdminのログイン用メールアドレス・パスワードを .env から読み込み
 
+  # 3つ目のコンテナ：Python(Flask)アプリ
+  web:
+    build: .
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+
 # データを永続化するための「名前付きボリューム」の宣言
 volumes:
   postgres_data:
